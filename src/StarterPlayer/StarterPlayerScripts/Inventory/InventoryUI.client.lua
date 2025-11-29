@@ -227,6 +227,10 @@ cScroll.Size = UDim2.new(1, 0, 1, -40)
 cScroll.Position = UDim2.new(0, 0, 0, 40)
 cScroll.BackgroundTransparency = 1
 cScroll.BorderSizePixel = 0
+cScroll.ScrollBarThickness = 4
+cScroll.ScrollBarImageColor3 = THEME.HeaderOrange
+cScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+cScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
 cScroll.Parent = containerFrame
 
 local cGrid = Instance.new("UIGridLayout")

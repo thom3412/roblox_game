@@ -6,7 +6,7 @@ local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 -- UI Elements
-local screenGui = player:WaitForChild("PlayerGui"):WaitForChild("ScreenGui", 10)
+local screenGui = player:WaitForChild("PlayerGui"):WaitForChild("ScreenGui", 0.5)
 if not screenGui then
 	screenGui = Instance.new("ScreenGui")
 	screenGui.Name = "ScreenGui"
@@ -37,12 +37,7 @@ local currentTarget = nil
 
 -- Remote Events
 local eventsFolder = ReplicatedStorage:WaitForChild("Events")
-local pickupEvent = eventsFolder:WaitForChild("PickupItem", 10)
-
-if not pickupEvent then
-	warn("⚠️ InteractionController: PickupItem event not found!")
-	return
-end
+local pickupEvent = eventsFolder:WaitForChild("PickupItem")
 
 print("🎯 InteractionController: Ready!")
 
@@ -67,8 +62,10 @@ local function CheckForInteractable()
 		local containerType = hit:FindFirstChild("ContainerType")
 		
 		if (itemType or containerType) then
-			-- Check distance from CHARACTER (not camera)
-			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+			-- Check if container is empty
+			if containerType and hit:GetAttribute("IsEmpty") then
+				-- Skip empty containers
+			elseif player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
 				local charPos = player.Character.HumanoidRootPart.Position
 				local dist = (hit.Position - charPos).Magnitude
 				

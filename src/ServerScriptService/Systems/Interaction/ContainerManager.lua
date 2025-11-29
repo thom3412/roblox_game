@@ -46,6 +46,13 @@ function ContainerManager.RemoveItem(container, index)
 	local contents = containerContents[container]
 	if contents and contents[index] then
 		table.remove(contents, index)
+		
+		-- Check if empty
+		if #contents == 0 then
+			container:SetAttribute("IsEmpty", true)
+			print("🗑️ Container " .. container.Name .. " is now empty")
+		end
+		
 		return true
 	end
 	return false

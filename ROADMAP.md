@@ -1,113 +1,93 @@
 # 🎮 State of Decay - Survival Edition
 ## Roadmap Collaborative (Thom & Vincent)
 
-> **Concept** : Jeu de survie zombie en vue TPS (Third Person). Le joueur contrôle directement un survivant, explore le monde, récolte des ressources, combat des zombies, et améliore sa base pour survivre.
+> **Légende** :
+> - ✅ **[FAIT]** : Fonctionnel et validé.
+> - ⚠️ **[A REVOIR]** : Fonctionnel mais nécessite du polish ou des ajustements (Feedback utilisateur).
+> - 🚧 **[EN COURS]** : Développement actif / Partiel.
+> - ❌ **[A FAIRE]** : Pas encore commencé.
 
 ---
 
-## ✅ Phase 1 : Fondations (COMPLÉTÉ)
-*Socle de base réalisé.*
+## 📦 Phase 1 : Fondations & Interaction (Thom)
 
-### 1.1 Système de Caméra & Contrôles TPS
-- [x] Caméra over-the-shoulder (Vincent)
-- [x] Crosshair/Réticule (Vincent)
-- [ ] Rotation du personnage avec la caméra
-- [ ] Sprint (Shift)
-- [ ] Accroupi/Stealth (Ctrl)
+### 1. Système d'Interaction
+- ⚠️ **Raycast TPS** :
+  - ✅ Détection globale.
+  - ⚠️ **A CORRIGER** : Manque de précision pour les petits objets au sol.
+- ✅ **Prompt UI** : Affichage "[E] Pick up" dynamique.
+- ⚠️ **Surbrillance (Highlight)** :
+  - ⚠️ **A CORRIGER** : Comportement inadéquat (brille de loin sans crosshair). Doit être lié au Raycast/Focus.
 
-### 1.2 Mouvement du Joueur
-- [x] Déplacement WASD basique
-- [ ] Système de stamina (course limitée)
-- [ ] Animations : Walk, Run, Crouch, Idle
-- [ ] Footsteps audio (bruit qui attire les zombies)
+### 2. Système de Loot & Conteneurs
+- 🚧 **Génération de Loot** :
+  - ✅ Structure de base (Loot Tables).
+  - ⚠️ **A COMPLÉTER** : Contenu très basique (test avec parts). Manque la variété (Munitions spécifiques, Nourriture variée, Équipement).
+  - ❌ **Rareté** : Pas de système de rareté (Commun, Rare, Épique) pour l'instant.
+- ✅ **Gestion des Conteneurs** :
+  - ✅ Persistance session.
+  - ✅ Attribut "IsEmpty".
 
----
+### 3. Interface Utilisateur (UI)
+- ⚠️ **Inventaire Joueur** :
+  - ✅ Structure et Layout "State of Decay 2".
+  - ⚠️ **A AMÉLIORER** : Images (Icons) des items sont des placeholders. Design global "convenable" mais à améliorer.
+- ⚠️ **Inventaire Conteneur (Loot)** :
+  - ✅ Fonctionnel.
+  - ⚠️ **A AMÉLIORER** : Idem que joueur (Images, Polish).
+- ❌ **Polish UI** :
+  - ❌ Tooltips, Sons, Animations d'interface.
 
-## 📅 SPRINT 1-2 : Gameplay Core (Parallèle)
-
-> **Objectif** : Avoir un loop de gameplay fonctionnel : Explorer → Fouiller → Survivre
-
-### [Thom] 2. Système de Loot & Interaction (State of Decay Style)
-*Focus : Fouille de conteneurs et gestion d'inventaire.*
-
-- [ ] **2.1 Interaction & Surbrillance**
-  - [ ] Raycast TPS (corrigé pour nouvelle caméra)
-  - [ ] Surbrillance (Highlight) des objets interactifs
-  - [ ] Prompt "Appuyer sur E pour fouiller"
-
-- [ ] **2.2 Système de Conteneurs**
-  - [ ] Objets fouillables (Caisses, Armoires)
-  - [ ] Génération de loot (Loot Tables : Médical, Munitions, Civil)
-  - [ ] Persistance du contenu des conteneurs
-
-- [ ] **2.3 Interface de Loot (Double Grille)**
-  - [ ] Inventaire Joueur (Gauche)
-  - [ ] Inventaire Conteneur (Droite)
-  - [ ] Transfert d'items (Click to loot)
-
-### [Thom] 3. Stats & Survie
-*Focus : Gestion des besoins vitaux.*
-
-- [ ] **3.1 Stats du Joueur**
-  - [ ] Santé, Faim, Soif
-  - [ ] Dégradation dans le temps (Decay)
-  - [ ] Mort et Respawn
-
-- [ ] **3.2 HUD & Consommables**
-  - [ ] Barres de statut (UI)
-  - [ ] Utilisation des items (Manger, Boire, Soigner)
-  - [ ] Feedback sonore et visuel (Warnings)
-
-### [Vincent] 4. Combat & Menace Zombie
-*Focus : IA et danger.*
-
-- [ ] **4.1 IA Zombie Basique**
-  - [ ] Pathfinding vers le joueur
-  - [ ] Détection visuelle et sonore
-  - [ ] Attaque au corps-à-corps
-  
-- [ ] **4.2 Combat Mêlée**
-  - [ ] Attaque avec arme blanche
-  - [ ] Dégâts et Hitbox
+### 4. Stats & Survie
+- 🚧 **Système de Stats** :
+  - ✅ UI Barres (Santé, Faim, Soif).
+  - ⚠️ **A APPROFONDIR** :
+    - ❌ Logique de gain (Pain vs Soda vs Eau).
+    - ❌ Logique de perte (Pourquoi on perd plus de sang/faim à tel moment ?).
+    - ❌ Impact réel sur le gameplay (Stamina réduite si faim ?).
 
 ---
 
-## 📅 SPRINT 3-4 : Arsenal & Base (Parallèle)
+## 🧟 Phase 2 : Combat & Menace (Vincent)
 
-> **Objectif** : Se défendre et s'installer.
+### 1. Mouvements & Contrôles
+- ✅ **Caméra** : Vue épaule (OTS).
+- ✅ **Déplacements** : WASD, Sprint, Crouch.
+- ❌ **Animations** :
+  - ⚠️ **CRITIQUE** : Les animations ne chargent pas.
 
-### [Thom] 5. Armes à Feu
-*Focus : Combat à distance.*
-
-- [ ] **5.1 Système d'Armes**
-  - [ ] Équiper/Déséquiper (Slot Arme)
-  - [ ] Tir (Raycast), Recul, Son
-  - [ ] Munitions et Rechargement
-
-- [ ] **5.2 Visée (Aiming)**
-  - [ ] Zoom (Clic Droit)
-  - [ ] Dispersion dynamique
-
-### [Thom] 6. Construction de Base
-*Focus : Fortification.*
-
-- [ ] **6.1 Système de Build**
-  - [ ] Placer des barricades/murs
-  - [ ] Stockage persistant (Coffres de base)
+### 2. IA Zombie
+- ✅ **Spawning** : ZombieManager fonctionnel.
+- 🚧 **Comportement** :
+  - ❌ Pathfinding complexe.
+  - ❌ Détection & Attaque.
 
 ---
 
-## 📅 SPRINT 5-6 : Polish & Immersion
+## 🔫 Phase 3 : Arsenal & Base (Prochaine Étape)
 
-- [ ] **Animations** : Fouille, Manger, Boire, Recharger
-- [ ] **Cycle Jour/Nuit** : Zombies plus agressifs la nuit
-- [ ] **Map** : Ville abandonnée, intérieurs visitables
+### 1. Armes à Feu (Thom - PRIORITÉ)
+- ❌ **Système de base** : Class "Weapon", Munitions.
+- ❌ **Tir** : Raycast, Recul.
+- ❌ **Visée** : Zoom.
+
+### 2. Construction
+- ❌ Système de placement.
 
 ---
 
-## 🎯 Priorités Immédiates (Next Steps)
+## 📝 Backlog Technique & Améliorations
 
-1. **Thom** : Commencer le système d'**Armes à Feu** (Pistolet).
-2. **Vincent** : Avancer sur l'**IA Zombie**.
+1. **[URGENT] Fixer les Animations**.
+2. **[GAMEPLAY] Approfondir les Stats** : Définir des règles précises de consommation et de perte.
+3. **[CONTENT] Remplir les Loot Tables** : Créer les vrais items (Data) et ajouter la rareté.
+4. **[POLISH] Raycast & Highlight** : Rendre la détection plus stricte et le highlight contextuel.
+5. **[UI] Assets Graphiques** : Remplacer les placeholders par de vraies icônes.
 
-**Estimated Total Development Time**: 4-6 mois (Duo dev)
+---
+
+## 🎯 Objectif Actuel
+**Consolider l'existant avant d'avancer** :
+1. Corriger le Raycast/Highlight.
+2. Remplir un peu plus les Loot Tables (avec Rareté).
+3. Affiner la logique des Stats.
