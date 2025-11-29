@@ -62,27 +62,59 @@ local function CheckForInteractable()
 	if raycastResult and raycastResult.Instance then
 		local hit = raycastResult.Instance
 		
-		-- Check if it's an interactable item
+		-- Check if it's an interactable item or container
 		local itemType = hit:FindFirstChild("ItemType")
-		if itemType and itemType:IsA("StringValue") then
+		local containerType = hit:FindFirstChild("ContainerType")
+		
+		if (itemType or containerType) then
 			-- Check distance from CHARACTER (not camera)
 			if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
 				local charPos = player.Character.HumanoidRootPart.Position
 				local dist = (hit.Position - charPos).Magnitude
 				
 				if dist <= INTERACTION_RANGE then
-					currentTarget = hit
-					promptLabel.Text = "[E] Pick up " .. hit.Name
-					promptLabel.Visible = true
+					-- New Target Found
+					if currentTarget ~= hit then
+						-- Clear old highlight
+						if currentTarget then
+							local oldHighlight = currentTarget:FindFirstChild("InteractionHighlight")
+							if oldHighlight then oldHighlight:Destroy() end
+						end
+						
+						-- Set new target
+						currentTarget = hit
+						
+						-- Add Highlight
+						local highlight = Instance.new("Highlight")
+						highlight.Name = "InteractionHighlight"
+						highlight.Adornee = hit
+						highlight.FillColor = Color3.fromRGB(255, 255, 255)
+						highlight.FillTransparency = 0.8
+						highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+						highlight.OutlineTransparency = 0
+						highlight.Parent = hit
+						
+						-- Update Prompt
+						if containerType then
+							promptLabel.Text = "[E] Search " .. hit.Name
+						else
+							promptLabel.Text = "[E] Pick up " .. hit.Name
+						end
+						promptLabel.Visible = true
+					end
 					return
 				end
 			end
 		end
 	end
 	
-	-- No target found
-	currentTarget = nil
-	promptLabel.Visible = false
+	-- No target found or out of range
+	if currentTarget then
+		local oldHighlight = currentTarget:FindFirstChild("InteractionHighlight")
+		if oldHighlight then oldHighlight:Destroy() end
+		currentTarget = nil
+		promptLabel.Visible = false
+	end
 end
 
 -- Handle E key press
@@ -98,10 +130,20 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		
 		if currentTarget then
 			lastPickupTime = now
-			print("📦 Attempting to pick up: " .. currentTarget.Name)
-			pickupEvent:FireServer(currentTarget)
 			
-			-- Hide prompt immediately to prevent confusion
+			if currentTarget:FindFirstChild("ContainerType") then
+				print("🔍 Requesting to search: " .. currentTarget.Name)
+				local events = ReplicatedStorage:FindFirstChild("Events")
+				local searchEvent = events and events:FindFirstChild("SearchContainer")
+				if searchEvent then
+					searchEvent:FireServer(currentTarget)
+				end
+			else
+				print("📦 Attempting to pick up: " .. currentTarget.Name)
+				pickupEvent:FireServer(currentTarget)
+			end
+			
+			-- Hide prompt immediately
 			promptLabel.Visible = false
 			currentTarget = nil
 		end

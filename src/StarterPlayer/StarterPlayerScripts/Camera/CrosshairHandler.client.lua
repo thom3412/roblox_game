@@ -40,12 +40,18 @@ local fadeOut = TweenService:Create(stroke, fadeInfo, {Transparency = 1})
 
 -- 2. Mouse Locking
 local function updateMouseBehavior()
+	if player:GetAttribute("IsMenuOpen") then
+		-- Menu is open: Do nothing (let InventoryUI handle mouse)
+		circle.Visible = false
+		return
+	end
+	
+	circle.Visible = true
 	UserInputService.MouseIconEnabled = false
 	UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 end
 
 RunService.RenderStepped:Connect(updateMouseBehavior)
-updateMouseBehavior()
 
 -- 3. Handle Input for Crosshair Visibility
 UserInputService.InputBegan:Connect(function(input, gameProcessed)

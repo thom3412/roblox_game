@@ -8,14 +8,6 @@ Salut Vincent ! Voici comment rejoindre le projet Roblox de Thom.
 - Télécharge et installe Git : https://git-scm.com/download/win
 - Pendant l'installation, garde les options par défaut
 
-### 2. Roblox Studio
-- Télécharge : https://www.roblox.com/create
-- Installe normalement
-
-### 3. VS Code
-- Télécharge : https://code.visualstudio.com/
-- Installe normalement
-
 ### 4. Extension Rojo pour VS Code
 1. Ouvre VS Code
 2. Va dans Extensions (Ctrl+Shift+X)

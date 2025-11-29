@@ -37,6 +37,9 @@ function ItemSpawner.Init()
 		ItemSpawner.SpawnItems(itemType, count, itemsFolder)
 	end
 	
+	-- Spawn Containers (NEW)
+	for i = 1, 3 do ItemSpawner.SpawnContainer("MedicalCrate", SPAWN_AREA) end
+	
 	print("✅ ItemSpawner: Spawned all items!")
 end
 
@@ -103,6 +106,35 @@ function ItemSpawner.CreateItem(itemType, itemData)
 	textLabel.Parent = billboardGui
 	
 	return part
+end
+
+function ItemSpawner.SpawnContainer(type, area)
+	local container = Instance.new("Part")
+	container.Name = type
+	container.Size = Vector3.new(4, 3, 4)
+	container.Anchored = true
+	container.CanCollide = true
+	container.Material = Enum.Material.Metal
+	container.Color = Color3.fromRGB(0, 100, 255) -- Blue for containers
+	
+	-- Random position
+	local randomX = area.Center.X + math.random(-area.Size.X/2, area.Size.X/2)
+	local randomZ = area.Center.Z + math.random(-area.Size.Z/2, area.Size.Z/2)
+	container.Position = Vector3.new(randomX, area.Center.Y, randomZ)
+	
+	-- Tags
+	local typeVal = Instance.new("StringValue")
+	typeVal.Name = "ContainerType"
+	typeVal.Value = type
+	typeVal.Parent = container
+	
+	local lootable = Instance.new("BoolValue")
+	lootable.Name = "Lootable"
+	lootable.Value = true
+	lootable.Parent = container
+	
+	container.Parent = workspace:FindFirstChild("WorldItems") or workspace
+	print("📦 Spawned Container: " .. type)
 end
 
 -- Auto-initialize

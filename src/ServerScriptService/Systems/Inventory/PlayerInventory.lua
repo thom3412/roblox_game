@@ -23,6 +23,19 @@ function PlayerInventory.Init()
 		print("📡 RemoteEvent 'UpdateInventory' created")
 	end
 	
+	local useItemEvent = eventsFolder:FindFirstChild("UseItem")
+	if not useItemEvent then
+		useItemEvent = Instance.new("RemoteEvent")
+		useItemEvent.Name = "UseItem"
+		useItemEvent.Parent = eventsFolder
+		print("📡 RemoteEvent 'UseItem' created")
+	end
+	
+	-- Listen for usage
+	useItemEvent.OnServerEvent:Connect(function(player, slot)
+		PlayerInventory.UseItem(player, slot)
+	end)
+	
 	print("✅ PlayerInventory: Ready!")
 end
 
@@ -160,6 +173,58 @@ end
 function PlayerInventory.OnPlayerRemoving(player)
 	inventories[player.UserId] = nil
 	print("🗑️ Removed inventory for " .. player.Name)
+end
+
+-- Handle Item Usage
+function PlayerInventory.UseItem(player, slot)
+	local inventory = inventories[player.UserId]
+	if not inventory then return end
+	
+	local itemStack = inventory[slot]
+	if not itemStack then return end
+	
+	local itemData = ItemTypes[itemStack.ItemType]
+	if not itemData then return end
+	
+	-- Check if consumable
+	if itemData.Type == "Consumable" then
+		local PlayerStats = require(script.Parent.Parent.Stats.PlayerStats)
+		local used = false
+		
+		if itemData.HealAmount then
+			PlayerStats.ModifyStat(player, "Health", itemData.HealAmount)
+			used = true
+		end
+		
+		if itemData.HungerRestore then
+			PlayerStats.ModifyStat(player, "Hunger", itemData.HungerRestore)
+			used = true
+		end
+		
+		if itemData.ThirstRestore then
+			PlayerStats.ModifyStat(player, "Thirst", itemData.ThirstRestore)
+			used = true
+		end
+		
+		if used then
+			PlayerInventory.RemoveItem(player, itemStack.ItemType, 1)
+			print("🍽️ " .. player.Name .. " used " .. itemData.Name)
+			
+			-- Play Sound
+			local soundId = "rbxassetid://12221967" -- Default blip
+			if itemData.HungerRestore then
+				soundId = "rbxassetid://907524496" -- Crunch
+			elseif itemData.ThirstRestore then
+				soundId = "rbxassetid://907527632" -- Drink
+			end
+			
+			local sound = Instance.new("Sound")
+			sound.SoundId = soundId
+			sound.Parent = player.Character.HumanoidRootPart
+			sound:Play()
+			game:GetService("Debris"):AddItem(sound, 2)
+		end
+	end
 end
 
 return PlayerInventory

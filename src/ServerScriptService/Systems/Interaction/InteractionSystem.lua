@@ -10,23 +10,94 @@ function InteractionSystem.Init()
 	-- Get PlayerInventory reference
 	PlayerInventory = require(script.Parent.Parent.Inventory.PlayerInventory)
 	
-	-- Create RemoteEvent for pickups
-	local eventsFolder = ReplicatedStorage:WaitForChild("Events")
-	local pickupEvent = eventsFolder:FindFirstChild("PickupItem")
-	
-	if not pickupEvent then
-		pickupEvent = Instance.new("RemoteEvent")
-		pickupEvent.Name = "PickupItem"
-		pickupEvent.Parent = eventsFolder
-		print("📡 RemoteEvent 'PickupItem' created")
+	local eventsFolder = ReplicatedStorage:FindFirstChild("Events")
+	if not eventsFolder then
+		eventsFolder = Instance.new("Folder")
+		eventsFolder.Name = "Events"
+		eventsFolder.Parent = ReplicatedStorage
 	end
+	
+	-- Create RemoteEvents
+	local function CreateEvent(name)
+		local event = eventsFolder:FindFirstChild(name)
+		if not event then
+			event = Instance.new("RemoteEvent")
+			event.Name = name
+			event.Parent = eventsFolder
+			print("📡 RemoteEvent '" .. name .. "' created")
+		end
+		return event
+	end
+	
+	local pickupEvent = CreateEvent("PickupItem")
+	local searchEvent = CreateEvent("SearchContainer")
+	local openUIEvent = CreateEvent("OpenContainerUI")
+	local transferEvent = CreateEvent("TransferItem")
 	
 	-- Listen for pickup requests
 	pickupEvent.OnServerEvent:Connect(function(player, item)
 		InteractionSystem.OnPickupRequest(player, item)
 	end)
 	
+	-- Listen for search requests
+	searchEvent.OnServerEvent:Connect(function(player, container)
+		InteractionSystem.OnSearchRequest(player, container)
+	end)
+	
+	-- Listen for transfer requests
+	transferEvent.OnServerEvent:Connect(function(player, container, slotIndex)
+		InteractionSystem.HandleTransfer(player, container, slotIndex)
+	end)
+	
 	print("✅ InteractionSystem: Ready!")
+end
+
+function InteractionSystem.OnSearchRequest(player, container)
+	-- Validation
+	if not container or not container:FindFirstChild("ContainerType") then return end
+	
+	local distance = (container.Position - player.Character.HumanoidRootPart.Position).Magnitude
+	if distance > 15 then return end
+	
+	-- Get Loot
+	local ContainerManager = require(script.Parent.ContainerManager)
+	local contents = ContainerManager.GetContents(container)
+	
+	-- Send to client (Open UI)
+	local events = ReplicatedStorage:FindFirstChild("Events")
+	local openUIEvent = events and events:FindFirstChild("OpenContainerUI")
+	
+	if openUIEvent then
+		openUIEvent:FireClient(player, container, contents)
+		print("📂 Opened container for " .. player.Name)
+	end
+end
+
+function InteractionSystem.HandleTransfer(player, container, slotIndex)
+	local ContainerManager = require(script.Parent.ContainerManager)
+	local PlayerInventory = require(script.Parent.Parent.Inventory.PlayerInventory)
+	
+	local contents = ContainerManager.GetContents(container)
+	if not contents then return end
+	
+	local itemData = contents[slotIndex]
+	if not itemData then return end
+	
+	-- Try to add to player inventory
+	local success = PlayerInventory.AddItem(player, itemData.ItemType, itemData.Count)
+	
+	if success then
+		-- Remove from container
+		ContainerManager.RemoveItem(container, slotIndex)
+		
+		-- Refresh UI
+		local events = ReplicatedStorage:FindFirstChild("Events")
+		local openUIEvent = events and events:FindFirstChild("OpenContainerUI")
+		if openUIEvent then
+			openUIEvent:FireClient(player, container, contents)
+		end
+		print("✅ Looted " .. itemData.ItemType)
+	end
 end
 
 function InteractionSystem.OnPickupRequest(player, item)

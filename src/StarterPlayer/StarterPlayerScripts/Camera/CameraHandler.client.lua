@@ -28,6 +28,8 @@ UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 
 -- Input Handling
 UserInputService.InputChanged:Connect(function(input, gameProcessed)
+	if player:GetAttribute("IsMenuOpen") then return end -- Stop rotation if menu is open
+	
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = input.Delta
 		-- Adjust sensitivity here
