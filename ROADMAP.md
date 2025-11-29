@@ -76,6 +76,20 @@
 
 ---
 
+## 🌐 Phase 4 : Multijoueur & Polish (Futur)
+
+### 1. Interactions Joueurs
+- ❌ **Échange (Trading)** : Échanger des items entre joueurs.
+- ❌ **Groupe/Escouade** : Voir la position des alliés, pas de friendly fire.
+- ❌ **Revive** : Relever un joueur à terre.
+
+### 2. Release & Optimisation
+- ❌ **Optimisation** : Performance (Streaming, Memory).
+- ❌ **Mobile/Console** : Support manette et tactile.
+- ❌ **Bêta Test** : Session de test avec plusieurs joueurs.
+
+---
+
 ## 📝 Backlog Technique & Améliorations
 
 1. **[URGENT] Fixer les Animations**.
