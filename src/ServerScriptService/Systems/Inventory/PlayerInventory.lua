@@ -12,24 +12,10 @@ local MAX_SLOTS = 20
 function PlayerInventory.Init()
 	print("🎒 PlayerInventory: Initializing...")
 	
-	-- Create RemoteEvent for inventory sync
+	-- Get RemoteEvents (they exist from ReplicatedStorage at startup)
 	local eventsFolder = ReplicatedStorage:WaitForChild("Events")
-	local updateInventoryEvent = eventsFolder:FindFirstChild("UpdateInventory")
-	
-	if not updateInventoryEvent then
-		updateInventoryEvent = Instance.new("RemoteEvent")
-		updateInventoryEvent.Name = "UpdateInventory"
-		updateInventoryEvent.Parent = eventsFolder
-		print("📡 RemoteEvent 'UpdateInventory' created")
-	end
-	
-	local useItemEvent = eventsFolder:FindFirstChild("UseItem")
-	if not useItemEvent then
-		useItemEvent = Instance.new("RemoteEvent")
-		useItemEvent.Name = "UseItem"
-		useItemEvent.Parent = eventsFolder
-		print("📡 RemoteEvent 'UseItem' created")
-	end
+	local updateInventoryEvent = eventsFolder:WaitForChild("UpdateInventory")
+	local useItemEvent = eventsFolder:WaitForChild("UseItem")
 	
 	-- Listen for usage
 	useItemEvent.OnServerEvent:Connect(function(player, slot)

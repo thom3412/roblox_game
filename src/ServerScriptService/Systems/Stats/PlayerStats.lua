@@ -15,16 +15,9 @@ local STARVATION_DAMAGE = 5
 function PlayerStats.Init()
 	print("❤️ PlayerStats: Initializing...")
 	
-	-- Create RemoteEvent
+	-- Get RemoteEvents (they exist from ReplicatedStorage at startup)
 	local eventsFolder = ReplicatedStorage:WaitForChild("Events")
-	local updateStatsEvent = eventsFolder:FindFirstChild("UpdateStats")
-	
-	if not updateStatsEvent then
-		updateStatsEvent = Instance.new("RemoteEvent")
-		updateStatsEvent.Name = "UpdateStats"
-		updateStatsEvent.Parent = eventsFolder
-		print("📡 RemoteEvent 'UpdateStats' created")
-	end
+	local updateStatsEvent = eventsFolder:WaitForChild("UpdateStats")
 	
 	-- Start decay loop
 	task.spawn(function()

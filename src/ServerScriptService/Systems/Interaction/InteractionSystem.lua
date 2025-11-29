@@ -10,29 +10,12 @@ function InteractionSystem.Init()
 	-- Get PlayerInventory reference
 	PlayerInventory = require(script.Parent.Parent.Inventory.PlayerInventory)
 	
-	local eventsFolder = ReplicatedStorage:FindFirstChild("Events")
-	if not eventsFolder then
-		eventsFolder = Instance.new("Folder")
-		eventsFolder.Name = "Events"
-		eventsFolder.Parent = ReplicatedStorage
-	end
-	
-	-- Create RemoteEvents
-	local function CreateEvent(name)
-		local event = eventsFolder:FindFirstChild(name)
-		if not event then
-			event = Instance.new("RemoteEvent")
-			event.Name = name
-			event.Parent = eventsFolder
-			print("📡 RemoteEvent '" .. name .. "' created")
-		end
-		return event
-	end
-	
-	local pickupEvent = CreateEvent("PickupItem")
-	local searchEvent = CreateEvent("SearchContainer")
-	local openUIEvent = CreateEvent("OpenContainerUI")
-	local transferEvent = CreateEvent("TransferItem")
+	-- Get RemoteEvents (they exist from ReplicatedStorage at startup)
+	local eventsFolder = ReplicatedStorage:WaitForChild("Events")
+	local pickupEvent = eventsFolder:WaitForChild("PickupItem")
+	local searchEvent = eventsFolder:WaitForChild("SearchContainer")
+	local openUIEvent = eventsFolder:WaitForChild("OpenContainerUI")
+	local transferEvent = eventsFolder:WaitForChild("TransferItem")
 	
 	-- Listen for pickup requests
 	pickupEvent.OnServerEvent:Connect(function(player, item)
