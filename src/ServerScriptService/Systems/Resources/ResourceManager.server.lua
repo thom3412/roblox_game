@@ -10,16 +10,9 @@ local updateEvent = nil
 function ResourceManager.Init()
 	print("🌲 ResourceManager Initialized")
 	
-	-- Créer le RemoteEvent s'il n'existe pas
+	-- Get RemoteEvent (exists from ReplicatedStorage at startup)
 	local eventsFolder = ReplicatedStorage:WaitForChild("Events")
-	updateEvent = eventsFolder:FindFirstChild("UpdateResources")
-	
-	if not updateEvent then
-		updateEvent = Instance.new("RemoteEvent")
-		updateEvent.Name = "UpdateResources"
-		updateEvent.Parent = eventsFolder
-		print("📡 RemoteEvent 'UpdateResources' created")
-	end
+	updateEvent = eventsFolder:WaitForChild("UpdateResources")
 	
 	-- Initialiser toutes les ressources à 0
 	for key, data in pairs(ResourceTypes) do
