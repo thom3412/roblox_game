@@ -1,19 +1,21 @@
-# 🎮 State of Decay - Commander Edition
+# 🧟 State of Decay / Surrounded - Project Roadmap
 ## Roadmap Collaborative (Thom & Vincent)
 
-> **Concept** : Jeu de type Tower Defense / Commander où le joueur donne des ordres à des survivants pour gérer une base, récolter des ressources et se défendre contre des vagues de zombies.
+> **Concept** : Jeu de survie à la 3ème personne (State of Decay style). Le joueur incarne un survivant et interagit directement avec les autres (Dialogues, Recrutement) pour gérer sa communauté.
 
 ---
 
 ## ✅ Phase 1 : Fondations (COMPLÉTÉ)
 *Socle commun déjà réalisé.*
 
-### 1.1 Système de Contrôle Commander
-- [x] Sélection d'unités (clic gauche)
-- [x] Highlight moderne sur sélection
-- [x] Commandes de mouvement (clic droit)
-- [x] Système de pathfinding intelligent
-- [x] Évitement d'obstacles (Map)
+### 1.1 Système d'Interaction (Refonte)
+- [ ] **Interaction Directe** (ProximityPrompt)
+  - [ ] Parler aux survivants (Dialogues)
+  - [ ] Recruter / Enrôler (Follow me)
+  - [ ] Echanger des objets (Trade)
+- [ ] **Commandes Simplifiées** (Contextuelles)
+  - [ ] "Reste ici" / "Suis-moi"
+  - [ ] "Fouille ce conteneur"
 
 ### 1.2 Mouvement et Animation
 - [x] Rotation avant déplacement
@@ -46,6 +48,10 @@
   - [ ] Inventaire de survivant (capacité limitée)
   - [ ] Retour automatique à la base pour déposer
   - [ ] UI d'affichage des ressources globales
+- [ ] **2.4 Système de Fouille (Scavenging)**
+  - [ ] Fouille de conteneurs (Meubles, Coffres, Voitures)
+  - [ ] Loot tables aléatoires (Rareté des objets)
+  - [ ] Durée d'interaction (Risk/Reward)
 - [ ] **2.3 Gestion de la Faim**
   - [ ] Barre de faim par survivant
   - [ ] Consommation de nourriture automatique
@@ -98,6 +104,10 @@
 - [ ] **4.2 Arsenal**
   - [ ] Armes de mêlée (couteau, batte)
   - [ ] Armes à distance (pistolet) + Projectiles
+- [ ] **4.4 Système de Crafting (Atelier)**
+  - [ ] Craft de munitions
+  - [ ] Craft de soins (Bandages)
+  - [ ] Réparation d'armes
 - [ ] **4.3 Défense Passive**
   - [ ] Tourelles automatiques (Logique de tir)
 
