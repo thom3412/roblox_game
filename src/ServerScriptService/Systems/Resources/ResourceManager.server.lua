@@ -45,17 +45,4 @@ end
 
 ResourceManager.Init()
 
--- Initialize HarvestSystem
-local HarvestSystem = require(script.Parent.HarvestSystem)
-HarvestSystem.Init(ResourceManager)
-
--- TEST LOOP (A supprimer plus tard)
-task.spawn(function()
-	while true do
-		task.wait(5)
-		ResourceManager.AddResource("WOOD", 10)
-		ResourceManager.AddResource("FOOD", 5)
-	end
-end)
-
 return ResourceManager
