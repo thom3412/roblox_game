@@ -1,0 +1,31 @@
+# Roblox
+*.rbxl
+*.rbxlx
+*.rbxmx
+*.rbxl.lock
+
+# Rojo
+rojo.json
+*.rojo.json
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+
+# Windows
+$RECYCLE.BIN/
+
+# Node (if using Rojo npm version)
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*~
