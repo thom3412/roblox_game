@@ -1,45 +1,62 @@
 local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Configuration
-local CROSSHAIR_SIZE = 4
-local CROSSHAIR_COLOR = Color3.new(1, 1, 1) -- White
-local CROSSHAIR_TRANSPARENCY = 0.5
-
--- Create UI
+-- 1. Create Crosshair UI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "CrosshairGui"
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = playerGui
 
-local crosshairFrame = Instance.new("Frame")
-crosshairFrame.Name = "Crosshair"
-crosshairFrame.Size = UDim2.new(0, CROSSHAIR_SIZE, 0, CROSSHAIR_SIZE)
-crosshairFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-crosshairFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-crosshairFrame.BackgroundColor3 = CROSSHAIR_COLOR
-crosshairFrame.BackgroundTransparency = 0 -- Solid center
-crosshairFrame.BorderSizePixel = 0
-crosshairFrame.Parent = screenGui
+local circle = Instance.new("Frame")
+circle.Name = "AimCircle"
+circle.Size = UDim2.new(0, 40, 0, 40) -- 40x40 pixels
+circle.AnchorPoint = Vector2.new(0.5, 0.5)
+circle.Position = UDim2.new(0.5, 0, 0.5, 0)
+circle.BackgroundColor3 = Color3.new(1, 1, 1)
+circle.BackgroundTransparency = 1 -- Only show outline
+circle.Visible = true -- Visible but transparent initially
+circle.Parent = screenGui
 
--- Add a slight outline or transparency for better visibility
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(1, 0) -- Circle
-corner.Parent = crosshairFrame
+corner.CornerRadius = UDim.new(1, 0) -- Perfect circle
+corner.Parent = circle
 
--- Mouse Handling
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 2
+stroke.Color = Color3.new(1, 1, 1) -- White outline
+stroke.Transparency = 1 -- Start fully invisible
+stroke.Parent = circle
+
+-- Tweens
+local fadeInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local fadeIn = TweenService:Create(stroke, fadeInfo, {Transparency = 0.2})
+local fadeOut = TweenService:Create(stroke, fadeInfo, {Transparency = 1})
+
+-- 2. Mouse Locking
 local function updateMouseBehavior()
 	UserInputService.MouseIconEnabled = false
 	UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 end
 
--- Connect to RenderStepped to enforce mouse behavior
 RunService.RenderStepped:Connect(updateMouseBehavior)
-
--- Initial setup
 updateMouseBehavior()
+
+-- 3. Handle Input for Crosshair Visibility
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.UserInputType == Enum.UserInputType.MouseButton2 then
+		fadeIn:Play()
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input, gameProcessed)
+	if input.UserInputType == Enum.UserInputType.MouseButton2 then
+		fadeOut:Play()
+	end
+end)
